@@ -1,0 +1,109 @@
+:root{
+    --main-bg-color: #40b0ca;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+header{
+    background-color: var(--main-bg-color);
+    font-family: 'Big Shoulders Display', cursive; 
+}
+nav{
+    display: flex;
+}
+.logo1{
+    display: flex;
+    align-items: center;
+ 
+}
+.logo1 img{
+    width: 70px;
+    border-radius: 42px;
+}
+nav ul{
+    height: 58px;
+    display: flex;
+    justify-content: flex-start;
+align-items: center;
+} 
+nav ul li{
+    list-style: none;
+    padding: 0px 23px;
+    list-style: none;
+}
+nav ul li a{
+    color: wheat;
+    text-decoration: none;
+}
+nav ul li a:hover{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+.search{
+    display: flex;
+    align-items: center;
+}
+.search button{
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 900;
+}
+.search input{
+    width: 30vw;
+    height: 27px;
+    border-radius: 4px;
+    margin: 0 12pxpx 0 56px;
+    padding: 0 12px;
+    
+}
+.background img{
+    height: 59vh;
+    align-items: center;
+    width: 100vw;
+    mix-blend-mode: darken;
+    opacity: 0.9;
+}
+
+.card{
+    max-width: 91vw;
+    margin: 37px auto;
+    font-family: 'Noto Serif', serif;
+}
+.cards{
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+}
+.card-item{
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 9vw;
+    margin: 0 57px;
+}
+.card-item img{
+    width: 205px;
+    cursor:pointer;
+
+}
+.card h2{
+    font-family: 'Noto Serif', serif;
+}
+.list{
+    margin-top: -127px;
+}
+.lines{
+font-family:fantasy;
+margin-left:42px ;
+
+}
+footer{
+    height: 12vh;
+    background-color:var(--main-bg-color);
+    color: aliceblue;
+    font-family: 'Big Shoulders Display', cursive;
+}
+.checked {
+    color: orange;
+    cursor: pointer;
+  }
