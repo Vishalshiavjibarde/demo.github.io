@@ -1,0 +1,2939 @@
+***************************************************************************************
+
+
+                       CSORTLISTCTRL.CPP
+
+************************************************************************************
+
+
+// CSortListCtrlDlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "CSortListCtrl.h"
+#include "CSortListCtrlDlg.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+// CAboutDlg dialog used for App About
+
+class CAboutDlg : public CDialog
+{
+public:
+	CAboutDlg();
+
+// Dialog Data
+	enum { IDD = IDD_ABOUTBOX };
+
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+// Implementation
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+{
+}
+
+void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+END_MESSAGE_MAP()
+
+
+// CCSortListCtrlDlg dialog
+
+
+
+
+CCSortListCtrlDlg::CCSortListCtrlDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CCSortListCtrlDlg::IDD, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CCSortListCtrlDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_list);
+	DDX_Control(pDX, IDC_EDIT1, m_name);
+	DDX_Control(pDX, IDC_EDIT2, m_age);
+	DDX_Control(pDX, IDC_EDIT3, m_salary);
+}
+
+BEGIN_MESSAGE_MAP(CCSortListCtrlDlg, CDialog)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON1, &CCSortListCtrlDlg::OnBnClickedButton1)
+END_MESSAGE_MAP()
+
+
+// CCSortListCtrlDlg message handlers
+
+BOOL CCSortListCtrlDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// Add "About..." menu item to system menu.
+
+	// IDM_ABOUTBOX must be in the system command range.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
+	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	if (pSysMenu != NULL)
+	{
+		CString strAboutMenu;
+		strAboutMenu.LoadString(IDS_ABOUTBOX);
+		if (!strAboutMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+		}
+	}
+
+	// Set the icon for this dialog.  The framework does this automatically
+	//  when the application's main window is not a dialog
+	SetIcon(m_hIcon, TRUE);			// Set big icon
+	SetIcon(m_hIcon, FALSE);		// Set small icon
+
+	// TODO: Add extra initialization here
+
+
+	
+	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_SIMPLESELECT | LVS_EX_BORDERSELECT);
+	m_list.SetHeadings(L"Name,40;Age,20;Salary,100;");
+
+
+
+
+
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CCSortListCtrlDlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialog::OnSysCommand(nID, lParam);
+	}
+}
+
+// If you add a minimize button to your dialog, you will need the code below
+//  to draw the icon.  For MFC applications using the document/view model,
+//  this is automatically done for you by the framework.
+
+void CCSortListCtrlDlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this); // device context for painting
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		// Center icon in client rectangle
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		// Draw the icon
+		dc.DrawIcon(x, y, m_hIcon);
+	}
+	else
+	{
+		CDialog::OnPaint();
+	}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags
+//  the minimized window.
+HCURSOR CCSortListCtrlDlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CCSortListCtrlDlg::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
+
+	
+	CString Name,Age,Salary;
+
+	m_name.GetWindowText(Name);
+
+	m_age.GetWindowText(Age);
+
+	m_salary.GetWindowText(Salary);
+
+	m_list.AddItem(Name,Age,Salary);
+
+
+	Sleep(500);
+	m_name.SetWindowTextW(L"");
+	m_age.SetWindowTextW(L"");
+	m_salary.SetWindowTextW(L"");
+	
+	UpdateData(false);
+	UpdateWindow();
+		
+
+}
+
+
+
+
+
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                                CONTROLLIST2
+**************************************************************************************************
+
+
+// ListControl2Dlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "ListControl2.h"
+#include "ListControl2Dlg.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+// CAboutDlg dialog used for App About
+
+class CAboutDlg : public CDialog
+{
+public:
+	CAboutDlg();
+
+// Dialog Data
+	enum { IDD = IDD_ABOUTBOX };
+
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+// Implementation
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+{
+}
+
+void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+END_MESSAGE_MAP()
+
+
+// CListControl2Dlg dialog
+
+
+
+
+CListControl2Dlg::CListControl2Dlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CListControl2Dlg::IDD, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CListControl2Dlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_name);
+	DDX_Control(pDX, IDC_EDIT2, m_product);
+	DDX_Control(pDX, IDC_EDIT3, m_price);
+	DDX_Control(pDX, IDC_EDIT4, m_search);
+	DDX_Control(pDX, IDC_LIST2, m_list);
+	DDX_Control(pDX, IDC_LIST1, m_list1);
+}
+
+BEGIN_MESSAGE_MAP(CListControl2Dlg, CDialog)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
+	ON_EN_CHANGE(IDC_EDIT2, &CListControl2Dlg::OnEnChangeEdit2)
+	ON_BN_CLICKED(IDC_BUTTON1, &CListControl2Dlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CListControl2Dlg::OnBnClickedButton2)
+
+	//ON_EN_CHANGE(IDC_EDIT4, &CListControl2Dlg::OnEnChangeEdit4)
+END_MESSAGE_MAP()
+
+
+// CListControl2Dlg message handlers
+
+BOOL CListControl2Dlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// Add "About..." menu item to system menu.
+
+	// IDM_ABOUTBOX must be in the system command range.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
+	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	if (pSysMenu != NULL)
+	{
+		CString strAboutMenu;
+		strAboutMenu.LoadString(IDS_ABOUTBOX);
+		if (!strAboutMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+		}
+	}
+
+	// Set the icon for this dialog.  The framework does this automatically
+	//  when the application's main window is not a dialog
+	SetIcon(m_hIcon, TRUE);			// Set big icon
+	SetIcon(m_hIcon, FALSE);		// Set small icon
+
+	// TODO: Add extra initialization here
+
+	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_list1.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	CListCtrl *mylist=(CListCtrl*)GetDlgItem(IDC_LIST1);
+
+	mylist->InsertColumn(0,L"Name",LVCFMT_CENTER,120);
+	mylist->InsertColumn(1,L"Product",LVCFMT_CENTER,120);
+	mylist->InsertColumn(2,L"Price",LVCFMT_CENTER,150);
+
+    m_list.InsertColumn(0,L"Name",LVCFMT_CENTER,100);
+	m_list.InsertColumn(1,L"Product",LVCFMT_CENTER,75);
+	m_list.InsertColumn(2,L"Price",LVCFMT_CENTER,75);
+
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CListControl2Dlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialog::OnSysCommand(nID, lParam);
+	}
+}
+
+// If you add a minimize button to your dialog, you will need the code below
+//  to draw the icon.  For MFC applications using the document/view model,
+//  this is automatically done for you by the framework.
+
+void CListControl2Dlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this); // device context for painting
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		// Center icon in client rectangle
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		// Draw the icon
+		dc.DrawIcon(x, y, m_hIcon);
+	}
+	else
+	{
+		CDialog::OnPaint();
+	}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags
+//  the minimized window.
+HCURSOR CListControl2Dlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CListControl2Dlg::OnEnChangeEdit2()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+void CListControl2Dlg::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
+	TCHAR Name[100]={0},Product[100]={0},Price[100]={0};
+    int i = m_name.GetWindowText(Name,100);
+	int j=	m_product.GetWindowText(Product,100);
+	int k= m_price.GetWindowText(Price,100);
+
+	if(i!=0&&j!=0&&k!=0)
+	{
+
+	CListCtrl *mylist=(CListCtrl *)GetDlgItem(IDC_LIST1);
+	int nitem=mylist->InsertItem(0,Name);
+	mylist->SetItemText(nitem,1,Product);
+	mylist->SetItemText(nitem,2,Price);
+
+
+	CString mydata;
+	mydata.Format(_T(" %s %s %s "),Name,Product,Price);
+	
+
+	int count=0;
+	count=GetPrivateProfileInt(Name,TEXT("count"),0,_T("G:\\Vishal_Barde\\ListControl2\\Data2.ini"))+1;
+
+	CString cscount;
+	cscount.Format(_T("%d"),count);
+
+	
+	WritePrivateProfileString(Name,cscount,mydata,_T("G:\\Vishal_Barde\\ListControl2\\Data.ini"));
+
+
+	CString szcount;
+	szcount.Format(_T("%d"),count);
+	WritePrivateProfileString(Name,_T("count"),szcount,_T("G:\\Vishal_Barde\\ListControl2\\Data2.ini"));
+
+	MessageBox(L"Data Add Success",0,0);
+
+
+	m_name.SetWindowText(L"");
+	m_product.SetWindowText(L"");
+	m_price.SetWindowText(L"");
+
+	UpdateData(false);
+	UpdateWindow();
+	Sleep(500);
+
+	}
+	else
+	{
+		MessageBox(L"Field is Empty please Enter somting.....",0,0);
+		UpdateWindow();
+		OnInitDialog();
+		return ;
+	
+	}
+
+}
+
+void CListControl2Dlg::OnBnClickedButton2()
+{
+	// TODO: Add your control notification handler code here
+		
+	CString Search,data;
+	TCHAR xyz[100]={0};
+	TCHAR aaa[100]={0};
+	CString NAME,PROD,VALU;
+    int count=0;
+	m_search.GetWindowText(Search);
+	count = GetPrivateProfileInt(Search,_T("count"),count,_T("G:\\Vishal_Barde\\ListControl2\\Data2.ini"));
+  
+	for(int i=count;i>=1;i--)
+	{   
+		
+		data.Format(_T("%d"),i);
+        GetPrivateProfileString(Search,data,_T("N/A"),aaa,100,_T("G:\\Vishal_Barde\\ListControl2\\Data.ini"));
+		CString str3(aaa);
+        CString xyz1(" ");
+        int pos=0;
+        int j=1,k=1;
+       CString tok=str3.Tokenize(_T(" "),pos);
+       if(tok!=-1)
+	   {
+	      NAME=tok;
+          tok=str3.Tokenize(_T(" "),pos);
+	   }
+	    if(tok!=-1)
+	   {
+	      PROD=tok;
+          tok=str3.Tokenize(_T(" "),pos);
+	   }
+		 if(tok!=-1)
+	   {
+	      VALU=tok;
+    
+	   }
+		//CString tok=str3.Tokenize(xyz1,pos);
+	 //  int x=0;
+
+	 //  while(tok!=-1)
+	 //  {     
+		//   NAME=tok;
+		//   int nitem = m_list.InsertItem(0,NAME);
+		//   m_list.SetItemText(nitem,x,NAME);
+		//   tok=str3.Tokenize(_T(" "),pos);
+		//   x++;
+	 //  }
+
+ 
+      int nitem = m_list.InsertItem(0,NAME);
+
+	  m_list.SetItemText(nitem,0,NAME);
+	  m_list.SetItemText(nitem,1,PROD);
+	  m_list.SetItemText(nitem,2,VALU);
+
+
+
+	}
+	
+}
+
+
+
+
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                                CONTROLLIST3
+**************************************************************************************************
+	
+
+
+
+
+
+// ListControl3Dlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "ListControl3.h"
+#include "ListControl3Dlg.h"
+#include "shlwapi.h"
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+// CAboutDlg dialog used for App About
+
+class CAboutDlg : public CDialog
+{
+public:
+	CAboutDlg();
+
+// Dialog Data
+	enum { IDD = IDD_ABOUTBOX };
+
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+// Implementation
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+{
+}
+
+void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+END_MESSAGE_MAP()
+
+
+// CListControl3Dlg dialog
+
+
+
+
+CListControl3Dlg::CListControl3Dlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CListControl3Dlg::IDD, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CListControl3Dlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_list);
+	DDX_Control(pDX, IDC_EDIT1, m_path);
+}
+
+BEGIN_MESSAGE_MAP(CListControl3Dlg, CDialog)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON1_brows, &CListControl3Dlg::OnBnClickedButton1brows)
+	ON_BN_CLICKED(IDC_BUTTON2_load, &CListControl3Dlg::OnBnClickedButton2load)
+END_MESSAGE_MAP()
+
+
+// CListControl3Dlg message handlers
+
+BOOL CListControl3Dlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// Add "About..." menu item to system menu.
+
+	// IDM_ABOUTBOX must be in the system command range.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
+	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	if (pSysMenu != NULL)
+	{
+		CString strAboutMenu;
+		strAboutMenu.LoadString(IDS_ABOUTBOX);
+		if (!strAboutMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+		}
+	}
+
+	// Set the icon for this dialog.  The framework does this automatically
+	//  when the application's main window is not a dialog
+	SetIcon(m_hIcon, TRUE);			// Set big icon
+	SetIcon(m_hIcon, FALSE);		// Set small icon
+
+	// TODO: Add extra initialization here
+
+
+	m_list.InsertColumn(0,L"Data",LVCFMT_CENTER,139);
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CListControl3Dlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialog::OnSysCommand(nID, lParam);
+	}
+}
+
+// If you add a minimize button to your dialog, you will need the code below
+//  to draw the icon.  For MFC applications using the document/view model,
+//  this is automatically done for you by the framework.
+
+void CListControl3Dlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this); // device context for painting
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		// Center icon in client rectangle
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		// Draw the icon
+		dc.DrawIcon(x, y, m_hIcon);
+	}
+	else
+	{
+		CDialog::OnPaint();
+	}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags
+//  the minimized window.
+HCURSOR CListControl3Dlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CListControl3Dlg::OnBnClickedButton1brows()
+{
+	// TODO: Add your control notification handler code here
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	void CMyClass::OnFileOpen()
+//{
+   // szFilters is a text string that includes two file name filters: 
+   // "*.my" for "MyType Files" and "*.*' for "All Files."
+ //  TCHAR szFilters[]= _T("MyType Files (*.my)|*.my|All Files (*.*)|*.*||");
+   // Create an Open dialog; the default file name extension is ".my".
+  // CFileDialog fileDlg(TRUE, _T("my"), _T("*.my"),
+    //  OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+   // Display the file dialog. When user clicks OK, fileDlg.DoModal()  
+   // returns IDOK. 
+  // if(fileDlg.DoModal() == IDOK)
+ //  {
+ //     CString pathName = fileDlg.GetPathName();
+      // Implement opening and reading file in here. 
+      //Change the window's title to the opened file's title.
+   //   CString fileName = fileDlg.GetFileTitle();
+     // SetWindowText(fileName);
+   //}
+//}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+TCHAR szFilter[] = _T("Log Files(*.tex,*.log)|*.txt;*.log||");
+//CFileDialog dlgFile(TRUE,NULL,NULL,OFN_HIDEREADONLY,szFilter,this);
+CFileDialog dlgFile(TRUE);
+CString fileName;
+
+
+if(dlgFile.DoModal()==IDOK)
+{
+	//CString csFilePath=dlgFile.GetPathName();
+    CString csFilePath=dlgFile.GetFolderPath();
+	m_path.SetWindowText(csFilePath);
+}
+fileName.ReleaseBuffer();
+
+
+}
+
+void CListControl3Dlg::OnBnClickedButton2load()
+{
+	CString path;
+    m_path.GetWindowText(path);
+	FindFilesName(path);
+}
+void CListControl3Dlg::FindFilesName(CString path1)
+{
+	
+	// TODO: Add your control notification handler code here
+	//CString csFilePath;
+	//TCHAR wsHeaderText[MAX_PATH]={0}
+	//m_path.GetWindowText(csFilePath);
+	//
+
+	//CHeaderCtrl *pHdr=m_list.GetHeaderCtrl();
+	//WCHAR wsHeaderText[MAX_PATH]={L"Action"};
+	//HDITEM pHdItem;
+	//pHdItem.mask=HDI_TEXT;
+	//pHdItem.pszText=wsHeaderText;
+	//pHdItem.cchTextMax=MAX_PATH;
+	//pHdr->SetItem(5,&pHdItem);
+	//wcscpy(wsHeaderText,L"Apcon Thread ID");
+	//pHdItem.pszText = wsHeaderText;
+	//pHdr->SetItem(7,&pHdItem);
+	//wcscpy(wsHeaderText,L"PID");
+	//pHdItem.pszText=wsHeaderText;
+	//pHdr->SetItem(8,&pHdItem);
+
+
+	//	AfxBeginThread(ParseAndFillData,this);
+
+
+
+
+
+
+	//m_path.GetWindowText(path1);
+	//CString tempname;
+	//if(PathIsDirectory(path1))
+	//{
+ //      
+	//   tempname=path1+_T("\\*.*");
+	//   hFind = FindFirstFile(path1,&FindData);
+	//   do
+	//   {
+	//	   if(_tcscmp(FindData.cFileName,_T("."))!=0&&_tcscmp(FindData.cFileName,_T(".."))!=0)
+	//	   {
+	//		   CString lname;
+	//		   lname.Format(_T("%s\\%s"),path1,FindData.cFileName);
+	//		   FindFilesName(lname);
+	//	   }
+	//   }
+	//   while(FindNextFile(hFind,&FindData));
+	//}
+
+
+
+
+WIN32_FIND_DATA FindData2;    //structure ahe   yane first file and next file miilte
+HANDLE hFind2;
+CString Temp2;
+
+if(PathIsDirectory(path1))   //he fun ahe check kart ke alela path file ahe ka dir ahe 
+{
+    Temp2 = path1+_T("\\*.*");   //yane aaplaya sarya file miltat
+    hFind2 = FindFirstFile(Temp2,&FindData2);
+    
+    do
+    {
+        if(_tcscmp(FindData2.cFileName,_T("."))!=0 && _tcscmp(FindData2.cFileName,_T(".."))!=0)
+        {
+           
+            
+            lName.Format(_T("%s\\%s"),path1,FindData2.cFileName);
+			int nItem=m_list.InsertItem(0,lName);
+			m_list.SetItemText(nItem,0,lName);
+
+            FindFilesName(lName);
+        }
+    }
+    while(FindNextFile(hFind2,&FindData2));
+
+}
+	
+
+}
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                                PROGRESSBAR
+**************************************************************************************************
+	
+
+
+
+// ProgressbarDlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "Progressbar.h"
+#include "ProgressbarDlg.h"
+#include "shlwapi.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+int x=1;
+int i=1;
+CString No;
+BOOL y;
+CString PathName;
+CString xyz;
+
+
+// CAboutDlg dialog used for App About
+
+class CAboutDlg : public CDialog
+{
+public:
+	CAboutDlg();
+
+// Dialog Data
+	enum { IDD = IDD_ABOUTBOX };
+
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+// Implementation
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+{
+}
+
+void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+END_MESSAGE_MAP()
+
+
+// CProgressbarDlg dialog
+
+
+
+
+CProgressbarDlg::CProgressbarDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CProgressbarDlg::IDD, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CProgressbarDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_list);
+	DDX_Control(pDX, IDC_EDIT1, m_path);
+	DDX_Control(pDX, IDC_BUTTON1, m_load);
+	DDX_Control(pDX, IDC_BUTTON2, m_show);
+	DDX_Control(pDX, IDC_BUTTON3, m_reset);
+	DDX_Control(pDX, IDC_PROGRESS1, m_progress);
+}
+
+BEGIN_MESSAGE_MAP(CProgressbarDlg, CDialog)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON1, &CProgressbarDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CProgressbarDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CProgressbarDlg::OnBnClickedButton3)
+END_MESSAGE_MAP()
+
+
+// CProgressbarDlg message handlers
+
+BOOL CProgressbarDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// Add "About..." menu item to system menu.
+
+	// IDM_ABOUTBOX must be in the system command range.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
+	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	if (pSysMenu != NULL)
+	{
+		CString strAboutMenu;
+		strAboutMenu.LoadString(IDS_ABOUTBOX);
+		if (!strAboutMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+		}
+	}
+
+	// Set the icon for this dialog.  The framework does this automatically
+	//  when the application's main window is not a dialog
+	SetIcon(m_hIcon, TRUE);			// Set big icon
+	SetIcon(m_hIcon, FALSE);		// Set small icon
+
+	// TODO: Add extra initialization here
+
+
+
+	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES|LVS_EX_GRIDLINES | LVS_EX_SIMPLESELECT | LVS_EX_BORDERSELECT); 
+	//m_list.InsertColumn(1,_T("No"),LVCFMT_CENTER,50);
+	//m_list.InsertColumn(2,_T("Data"),LVCFMT_CENTER,180);
+     m_list.SetHeadings(L"ID,100;FILE,100");
+
+	
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CProgressbarDlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialog::OnSysCommand(nID, lParam);
+	}
+}
+
+// If you add a minimize button to your dialog, you will need the code below
+//  to draw the icon.  For MFC applications using the document/view model,
+//  this is automatically done for you by the framework.
+
+void CProgressbarDlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this); // device context for painting
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		// Center icon in client rectangle
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		// Draw the icon
+		dc.DrawIcon(x, y, m_hIcon);
+	}
+	else
+	{
+		CDialog::OnPaint();
+	}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags
+//  the minimized window.
+HCURSOR CProgressbarDlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CProgressbarDlg::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
+
+	BROWSEINFO bi = {0};
+	bi.lpszTitle = _T("Browse for Folder");
+	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+	if ( pidl != NULL )
+	{
+	TCHAR tszPath[MAX_PATH] = _T("\0");
+	if ( SHGetPathFromIDList(pidl, tszPath) == TRUE )
+	{
+		m_path.SetWindowText(tszPath );
+	}
+
+    }
+}
+
+void CProgressbarDlg::OnBnClickedButton2()
+{
+
+	CString path;
+   m_path.GetWindowText(path);
+
+   function(path);
+
+
+}
+void CProgressbarDlg::function(CString path)
+{
+	WIN32_FIND_DATA finddata;
+	HANDLE hfind;
+	CString temp;
+
+	if(PathIsDirectory(path))
+	{
+		temp = path+_T("\\*.*");
+		hfind = FindFirstFile(temp,&finddata);
+		
+		do
+		{
+			if(_tcscmp(finddata.cFileName,_T("."))!=0 && _tcscmp(finddata.cFileName,_T(".."))!=0 )
+			{
+				No.Format(_T("%d"),x);
+				Fname.Format(_T("%s\\%s"),path,finddata.cFileName);
+
+				 m_progress.SetRange(0,100);
+
+				 for (int x = 0; x <= 100; x++)
+				 {
+						   m_progress.SetPos(x);
+				 }
+					
+				 m_list.AddItem(No,Fname);
+				//m_list.InsertItem(0,No);
+				//
+				//i=0;
+				//m_list.SetItemText(i,0,No);	//second step		
+			 //	m_list.SetItemText(i,1,Fname);
+				//i++;
+		
+			    x = m_list.GetItemCount();
+				
+				x++;
+			}
+		}
+		while(y=FindNextFile(hfind,&finddata));	
+	}
+}
+
+
+
+
+void CProgressbarDlg::OnBnClickedButton3()
+{
+	// TODO: Add your control notification handler code here
+
+	//	UINT Count = m_show.DeleteAllItems();
+	//m_count.DeleteAllItems();
+	m_path.SetWindowText(L"");
+	m_progress.UpdateData();
+	m_progress.SetRange(0,100);
+	for (int z = 0; z <= 0; z++)
+				 {
+						   m_progress.SetPos(z);
+				 }
+}
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			//for brows the folder
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//WIN32_FIND_DATA FindData2;
+//HANDLE hFind2;
+//CString Temp2;
+//
+//if(PathIsDirectory(FolderPath2))
+//{
+//    Temp2 = FolderPath2+_T("\\*.*");
+//    hFind2 = FindFirstFile(Temp2,&FindData2);
+//    
+//    do
+//    {
+//        if(_tcscmp(FindData2.cFileName,_T("."))!=0 && _tcscmp(FindData2.cFileName,_T(".."))!=0)
+//        {
+//            count2++;
+//            
+//            lname2.Format(_T("%s\\%s"),FolderPath2,FindData2.cFileName);            
+//            FindFiles(lname2);
+//        }
+//    }
+//    while(FindNextFile(hFind2,&FindData2));
+//
+//}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                               CREATEREGISTRY
+**************************************************************************************************
+	
+
+
+
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+
+int main()
+{
+	LONG lreg;
+	HKEY hkey;
+	lreg= RegCreateKey(HKEY_LOCAL_MACHINE,
+		L"Software\\Test\\Product\\smartId",
+		&hkey);
+
+		if(lreg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry Create fail";
+		}
+		cout<<"Regist Create success";
+		RegCloseKey(hkey);
+		system("PAUSE");
+	return 0;
+
+}
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                              DELETEKEYREGISTRTY
+**************************************************************************************************
+	
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+
+int main()
+{
+
+	LONG iReg;
+//	HKEY hkey;
+
+	iReg=RegDeleteKey(HKEY_LOCAL_MACHINE,
+		L"Software\\Wow6432Node\\Test\\productId");
+
+		if(iReg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry Delete fail";
+		}
+
+		cout<<"Registry Delete success";
+
+	system("PAUSE");
+	return 0;
+
+}
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                              DELETEVALUEREGISTRY
+**************************************************************************************************
+
+
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+int main()
+
+{
+		LONG lreg;
+	    HKEY hkey;
+	   // DWORD data=12345;
+	 //   DWORD dwSize=sizeof(data);
+	    lreg=RegOpenKeyEx(HKEY_LOCAL_MACHINE,L"SOFTWARE\\Demo\\mydata\\",0,KEY_ALL_ACCESS,&hkey);
+		if(lreg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry open fail";
+		}
+		cout<<"Registry open success";
+
+		lreg=RegDeleteValue(hkey,L"value1");
+
+		if(lreg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry value delete fail";
+		}
+		cout<<"Regitstry value delete success";
+
+
+		//RegCloseKey(hkey);
+
+
+	system("PAUSE");
+	return 0;
+
+}
+
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                              REGENUMKEY
+**************************************************************************************************
+
+
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+
+
+int main()
+{
+  LONG lReg;
+	HKEY hkey;
+	DWORD i=0;
+	TCHAR chBuffer[100]={0};
+	DWORD data=sizeof(chBuffer);
+	lReg=RegOpenKeyW(HKEY_LOCAL_MACHINE,L"SOFTWARE\\Wow6432Node\\Classes\\AppID",&hkey);
+	
+
+	while (lReg!=ERROR_NO_MORE_ITEMS)
+	{
+		lReg=RegEnumKey(hkey,i++,chBuffer,data);
+
+	cout<<chBuffer<<"\n";
+	}
+	system("PAUSE");
+	return 0;
+}
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+
+                              REGENUMVALUE
+**************************************************************************************************
+
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+int main()
+
+{
+
+	HKEY hkey;
+	LONG lReg;
+	TCHAR chBuffer1[1000]={0};
+	TCHAR chBuffer2[1000]={0};
+	DWORD xyz=sizeof(chBuffer1);
+	DWORD abc=0;
+	DWORD i=0;
+	DWORD abc1=sizeof(chBuffer2);
+	while()
+	{
+		lReg=RegOpenKey(HKEY_LOCAL_MACHINE,L"SOFTWARE\\Wow6432Node\\Classes\\AppVClient.exe",&hkey);
+		lReg=RegEnumValue(hkey,i,chBuffer1,&xyz,NULL,&abc,(LPBYTE)chBuffer2,&abc1);
+		cout<<chBuffer1<<"\n";
+		cout<<chBuffer2<<"\n";
+	}
+
+	system("PAUSE");
+	return 0;
+
+}
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+                                      REGGETVALUE
+**************************************************************************************************
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	LONG lReg;
+	DWORD value=0;
+	DWORD BufferSize=200;
+	DWORD regType=0;
+	lReg=RegGetValue(HKEY_LOCAL_MACHINE,L"SOFTWARE\\Demo\\mydata\\",L"value",RRF_RT_ANY,&regType,(PVOID)&value,&BufferSize);
+	if(lReg!=ERROR_SUCCESS)
+	{
+		cout<<"Value get failed";
+	}
+	cout<<"Value get Success \n";
+	cout<<value<<"\n";
+
+
+	system("PAUSE");
+	return 0;
+
+}
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+                                      REGOPENKEY
+*****************************************************************************************************
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+
+int main()
+{
+		LONG lreg;
+		HKEY hkey;
+		lreg=RegOpenKey(HKEY_LOCAL_MACHINE,L"Software\\wow6432node\\test\\product\\smartid",&hkey);
+		if(lreg!=ERROR_SUCCESS)
+		{
+			cout<<"key open fail";
+		}
+		cout<<"key open success";
+
+		
+		RegCloseKey(hkey);
+	system("PAUSE");
+	return 0;
+}
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+                                      REGSETKEYVALUE
+*****************************************************************************************************
+
+
+
+#include<Windows.h>
+#include<iostream>
+#include<tchar.h>
+using namespace std;
+
+
+int main()
+{
+	LONG lReg;
+	HKEY hkey;
+	DWORD data=12345;
+	DWORD dwSize=sizeof(data);
+	lReg=RegOpenKeyEx(HKEY_LOCAL_MACHINE,L"SOFTWARE\\Demo\\mydata\\",0,KEY_ALL_ACCESS,&hkey);
+		if(lReg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry create fail";
+		}
+		cout<<"Registry create success";
+			
+		lReg=RegSetKeyValue(hkey,NULL,_T("value1"),REG_DWORD,(VOID*)&data,dwSize);
+		DWORD dwErr= GetLastError();
+	if(lReg!=ERROR_SUCCESS)
+	{
+		
+		cout<<"Registry set value fail";
+	}
+	cout<<"Registry set value success";
+
+	RegCloseKey(hkey);
+
+	system("PAUSE");
+	return 0;
+}
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+                                      REGSETVALUE
+*****************************************************************************************************
+
+
+#include<Windows.h>
+#include<iostream>
+using namespace std;
+
+
+int main()
+
+{
+
+	LONG lReg;
+	HKEY hkey;
+	DWORD data=12345;
+	lReg=RegCreateKey(HKEY_LOCAL_MACHINE,L"software\\Demo\\mydata1",&hkey);
+		if(lReg!=ERROR_SUCCESS)
+		{
+			cout<<"Registry create fail";
+		}
+		cout<<"Registry create success";
+
+
+		lReg=RegSetValueEx(hkey,L"value",NULL,REG_DWORD,(LPBYTE)&data,sizeof(data));
+
+		if(lReg!=ERROR_SUCCESS)
+		{
+			cout<<"value set  fail";
+		}
+		cout<<"value set success";
+
+			RegCloseKey(hkey);
+
+
+	system("PAUSE");
+	return 0;
+
+}
+
+
+
+#######################################################################################################
+
+
+
+
+***************************************************************************************************
+
+                                      APPCONLOG.CPP
+*****************************************************************************************************
+
+
+
+// APPCON_Log_ParserDlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "APPCON_Log_Parser.h"
+#include "APPCON_Log_ParserDlg.h"
+#include "shlwapi.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+// CAboutDlg dialog used for App About
+void CAPPCON_Log_ParserDlg::GetTodayDate()
+{
+	CTime ctToday;
+	ctToday = CTime::GetCurrentTime();
+	csToday = ctToday.Format(L"%m/%Y");
+	sprintf(szToday,"%S",csToday);`
+}
+
+class CAboutDlg : public CDialog
+{
+public:
+	CAboutDlg();
+
+// Dialog Data
+	enum { IDD = IDD_ABOUTBOX };
+
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+
+// Implementation
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+{
+}
+
+void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+END_MESSAGE_MAP()
+
+
+// CAPPCON_Log_ParserDlg dialog
+
+
+
+
+CAPPCON_Log_ParserDlg::CAPPCON_Log_ParserDlg(CWnd* pParent /*=NULL*/)
+	: CResizableDialog(CAPPCON_Log_ParserDlg::IDD, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CAPPCON_Log_ParserDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CResizableDialog::DoDataExchange(pDX);
+	//DDX_Control(pDX, IDC_LIST1_APPCON, m_AppconLC);
+	//DDX_Control(pDX, IDC_COMBO1_RULE, m_RuleCB);
+	//DDX_Control(pDX, IDC_EDIT1_KEY1, m_Key1);
+	//DDX_Control(pDX, IDC_EDIT2_KEY2, m_Key2);
+	//DDX_Control(pDX, IDC_EDIT3_KEY3, m_Key3);
+	//DDX_Control(pDX, IDC_EDIT4_KEY4, m_Key4);
+	//DDX_Control(pDX, IDC_EDIT5_KEY5, m_Key5);
+	//DDX_Control(pDX, IDC_EDIT2_FILEPATH, m_FilePath);
+	DDX_Control(pDX, IDC_LIST1_APPCON, m_ApconLC);
+	DDX_Control(pDX, IDC_EDIT1_KEY1, m_Key1);
+	DDX_Control(pDX, IDC_EDIT2_KEY2, m_Key2);
+	DDX_Control(pDX, IDC_EDIT3_KEY3, m_Key3);
+	DDX_Control(pDX, IDC_EDIT4_KEY4, m_Key4);
+	DDX_Control(pDX, IDC_EDIT5_KEY5, m_Key5);
+	DDX_Control(pDX, IDC_COMBO1_RULE, m_RuleCB);
+	DDX_Control(pDX, IDC_EDIT2_FILEPATH, m_LogFilePath);
+	DDX_Control(pDX, IDC_STATIC_STATUS, m_LoadStatus);
+	DDX_Control(pDX, IDC_STATIC_TIMEDIFF, m_TimeDiff);
+	DDX_Control(pDX, IDC_STATIC_MARKCOUNT, m_MarkCount);
+	DDX_Control(pDX, IDC_STATIC_DELCOUNT, m_DelCount);
+	DDX_Control(pDX, IDC_STATIC_COUNT, m_TotalCount);
+	DDX_Control(pDX, IDC_STATIC_FINDSTATUS, m_FindStatus);
+	DDX_Control(pDX, IDC_COMBO1_MARK, m_Marker);
+}
+
+BEGIN_MESSAGE_MAP(CAPPCON_Log_ParserDlg, CResizableDialog)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
+	ON_WM_DROPFILES()
+	ON_BN_CLICKED(IDC_BUTTON3_BROWSE, &CAPPCON_Log_ParserDlg::OnBnClickedButton3Browse)
+	ON_BN_CLICKED(IDC_BUTTON1_LOAD, &CAPPCON_Log_ParserDlg::OnBnClickedButton1Load)
+	ON_BN_CLICKED(IDC_BUTTON1_SEARCH, &CAPPCON_Log_ParserDlg::OnBnClickedButton1Search)
+	ON_BN_CLICKED(IDC_BUTTON2_SAVERULE, &CAPPCON_Log_ParserDlg::OnBnClickedButton2Saverule)
+	ON_CBN_SELCHANGE(IDC_COMBO1_RULE, &CAPPCON_Log_ParserDlg::OnCbnSelchangeCombo1Rule)
+	ON_COMMAND(ID_ACCELERATOR32771, &CAPPCON_Log_ParserDlg::OnAccelerator32771)
+	ON_COMMAND(ID_CONTEXT_COPY, &CAPPCON_Log_ParserDlg::OnContextCopy)
+	//ON_NOTIFY(NM_CLICK, IDC_SYSLINK1, &CAPPCON_Log_ParserDlg::OnNMClickSyslink1)
+	ON_NOTIFY(NM_CLICK, IDC_SYSLINK2, &CAPPCON_Log_ParserDlg::OnNMClickSyslink2)
+	ON_NOTIFY(NM_RCLICK, IDC_LIST1_APPCON, &CAPPCON_Log_ParserDlg::OnNMRClickList1Appcon)
+	ON_COMMAND(ID_ACCELERATOR32774, &CAPPCON_Log_ParserDlg::OnAccelerator32774)
+	ON_COMMAND(ID_ACCELERATOR32776, &CAPPCON_Log_ParserDlg::OnAccelerator32776)
+	ON_BN_CLICKED(IDC_BUTTON1, &CAPPCON_Log_ParserDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2_COPYM, &CAPPCON_Log_ParserDlg::OnBnClickedButton2Copym)
+	ON_BN_CLICKED(IDC_BUTTON2_COPYM2, &CAPPCON_Log_ParserDlg::OnBnClickedButton2Copym2)
+	ON_NOTIFY(NM_CLICK, IDC_SYSLINK3, &CAPPCON_Log_ParserDlg::OnNMClickSyslink3)
+//	ON_BN_CLICKED(IDC_BUTTON2, &CAPPCON_Log_ParserDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON2_FIND, &CAPPCON_Log_ParserDlg::OnBnClickedButton2Find)
+	ON_COMMAND(ID_ACCELERATOR32778, &CAPPCON_Log_ParserDlg::OnAccelerator32778)
+	ON_BN_CLICKED(IDC_BUTTON2_TIMEDIFF, &CAPPCON_Log_ParserDlg::OnBnClickedButton2Timediff)
+	ON_CBN_SELCHANGE(IDC_COMBO1_MARK, &CAPPCON_Log_ParserDlg::OnCbnSelchangeCombo1)
+	ON_COMMAND(ID_CONTEXT_COPYCHILDPATH, &CAPPCON_Log_ParserDlg::OnContextCopychildpath)
+	ON_COMMAND(ID_CONTEXT_COPYPARENTNAME, &CAPPCON_Log_ParserDlg::OnContextCopyparentname)
+	ON_COMMAND(ID_CONTEXT_COPYCOMMANDLINE, &CAPPCON_Log_ParserDlg::OnContextCopycommandline)
+	ON_BN_CLICKED(IDC_BUTTON3_BROWSE2_FOLDER, &CAPPCON_Log_ParserDlg::OnBnClickedButton3Browse2Folder)
+END_MESSAGE_MAP()
+
+
+// CAPPCON_Log_ParserDlg message handlers
+
+void CAPPCON_Log_ParserDlg::FillLogList(CString csLogFilePath)
+{
+	FILE *F;
+	CString csLogFileLine, csParentName, csChildPath, csAction,
+			csCommandLine, csApconThreadID, csPID, csParentPID, csChildMD5, csDateNTime, csTemp;
+	int iStart=0, iStart1=0, i=0;
+	CString csI;
+	char szLogFilePath[MAX_PATH]={0}, szLogFileLine[2048]={0};
+	sprintf(szLogFilePath,"%S",csLogFilePath);
+
+	F=fopen(szLogFilePath,"r");
+	if(F)
+	{
+		while(fgets(szLogFileLine,2048,F))
+		{
+			///////////////////////////DATE FILTER/////////////////////////////////
+			/*if(strstr(szLogFileLine,p->szToday)==NULL)
+			{
+				continue;
+			}*/
+			///////////////////////////////////////////////////////////////////////
+			iStart=0;
+			iStart1=0;
+			csLogFileLine = szLogFileLine;
+			int iHashCount = csLogFileLine.Replace(L"#",L"#");
+			if(bZVMonFlag == false)
+			{
+				if(iHashCount!=6)
+					continue;
+			}
+			else if(iHashCount<2)
+				continue;
+			csLogFileLine.Replace(L"##",L"# #");
+
+			if(bZVMonFlag)
+			{
+				//Sample log line: 01/07/2022 11:05:09, DEVENV.EXE#10128#17220, E:\PROJECTS\ACCLNTSRV\TRUNK\ACCLIENTSERVICE\DEBUG\BAT00000A1012817220.BAT
+				csDateNTime = csLogFileLine.Tokenize(L",", iStart);
+				csParentName = csLogFileLine.Tokenize(L"#", iStart);
+				if(csParentName.Compare(L" ")==0)
+				{
+					csParentName = csLogFileLine.Tokenize(L"#", iStart);
+				}
+				csApconThreadID = csLogFileLine.Tokenize(L"#", iStart);
+				csPID = csLogFileLine.Tokenize(L",", iStart);
+				csChildPath = csLogFileLine.Tokenize(L",", iStart);
+				int iExtPos = csChildPath.ReverseFind('.');
+				csAction = csChildPath.Right(csChildPath.GetLength() - iExtPos);
+			}
+
+
+			//m_ApconLC.SetHeadings(L"S.No,60;M/D,50;Parent Name,100;Child Path,150;Action,90;Command Line,150;Apcon Thread ID,120;PID,60;Parent PID,100;Child MD5,90");
+			//19/03/2022 09:36:47:357 AM#NPAVUPD.EXE
+			//#C:\PROGRAM FILES (X86)\NET PROTECTOR 202A\NPAVUPD2.EXE#Allowed##(2476,352,2920)#B92B4C6E1D3390AEC4B52F66E934354D,
+			else
+			{
+				csDateNTime = csLogFileLine.Tokenize(L"#",iStart);
+				csParentName = csLogFileLine.Tokenize(L"#",iStart);
+				csChildPath = csLogFileLine.Tokenize(L"#",iStart);
+				csAction = csLogFileLine.Tokenize(L"#",iStart);
+				csCommandLine = csLogFileLine.Tokenize(L"#",iStart);
+				csTemp = csLogFileLine.Tokenize(L"#",iStart);
+				if(csTemp.Find(L",",0)<0 && csTemp.Find(L")",0)<0)   
+					continue;
+				csApconThreadID = csTemp.Tokenize(L",",iStart1);
+				csApconThreadID.Replace(L"(",L"");
+				csPID = csTemp.Tokenize(L",",iStart1);
+				csParentPID = csTemp.Tokenize(L")",iStart1);
+				csChildMD5 = csLogFileLine.Tokenize(L"#",iStart);
+			}
+
+			++i;
+			csI.Format(L"%d",i);
+			if(bZVMonFlag == false)
+			{
+				m_ApconLC.AddItem(csI,L" ",csDateNTime,csParentName,csChildPath,csAction,csCommandLine,csApconThreadID,csPID,
+				csParentPID, csChildMD5,L"0");
+			}
+			else
+			{
+				if(csApconThreadID.Compare(L" ")!=0)
+					m_ApconLC.AddItem(csI,L" ",csDateNTime,csParentName,csChildPath,csAction,L" ",csApconThreadID,csPID,
+					L" ", L" ",L"0");
+				else
+					m_ApconLC.AddItem(csI,L" ",csDateNTime,csParentName,csChildPath,csAction,L" ",L"-1",L"-1",
+					L" ", L" ",L"0");
+			}
+		}
+		csI.Format(L"Count: %d ", m_ApconLC.GetItemCount());
+		GetDlgItem(IDC_STATIC_COUNT)->SetWindowText(csI);
+	}
+	else
+	{
+		MessageBox(L"Cannot open file");
+		return;
+	}
+	fclose(F);
+
+}
+
+void CAPPCON_Log_ParserDlg::BrowseFolder(CString csLogFilePath)
+{
+	WIN32_FIND_DATA findData;
+	HANDLE hFile;
+	WCHAR temp[MAX_PATH] = {0}, strTemp[MAX_PATH] = {0} ;
+	CString csReceivedString(csLogFilePath);
+	CString csBkpFileName;
+	csReceivedString = csReceivedString.Right(1);
+	wsprintf(strTemp, L"%s", csLogFilePath);
+	wcscat(strTemp, L"\\*.*");
+	hFile = FindFirstFile(strTemp,&findData);
+	csLogFilePath.Append(L"\\");
+
+	do
+	{
+ 		if(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			if(wcscmp(findData.cFileName,L".")== 0 || wcscmp(findData.cFileName,L"..")== 0)
+				continue;
+			if(csReceivedString.Compare(L"\\")==0)
+				wsprintf(temp,L"%s%s\\",csLogFilePath,findData.cFileName);
+			else
+				wsprintf(temp,L"%s\\%s\\",csLogFilePath,findData.cFileName);
+			BrowseFolder(temp);
+//			tCnt = GetFileCount(temp);
+			//count+=tCnt;
+		}
+		else
+		{
+			csBkpFileName = findData.cFileName;
+			if(csBkpFileName.Find(L".log",0)>=0)
+			{
+				csBkpFileName = csLogFilePath + csBkpFileName;
+				FillLogList(csBkpFileName);
+			}
+		}
+
+	}while(FindNextFile(hFile,&findData));
+}
+
+
+UINT ParseAndFillData(LPVOID lparam)
+{
+	CAPPCON_Log_ParserDlg *p = (CAPPCON_Log_ParserDlg *)lparam;
+	CString csLogFilePath;
+	p->m_LogFilePath.GetWindowTextW(csLogFilePath);
+	csLogFilePath.Trim();
+	
+	//Distinguish between file and folder path
+	int iPos;
+	iPos = csLogFilePath.ReverseFind('.');
+	iPos = csLogFilePath.GetLength() - iPos;
+
+	p->m_ApconLC.DeleteAllItems();
+
+	if(iPos != 4)
+	{
+		p->BrowseFolder(csLogFilePath);
+		return TRUE;
+	}
+
+	p->FillLogList(csLogFilePath);
+	
+	p->m_LoadStatus.SetWindowTextW(L"Data Loaded successfully!");
+}
+
+void CAPPCON_Log_ParserDlg::FillRuleCombo()
+{
+	WCHAR wsExePath[MAX_PATH]={0}, wsIniEntry[1024]={0}, wsIniCount[20]={0};
+	int iIniCount=0;
+	
+	GetModuleFileName(NULL,wsExePath,sizeof(wsExePath));
+	PathRemoveFileSpec(wsExePath);
+	wcscat(wsExePath,L"\\SearchRules.ini");
+	iIniCount = GetPrivateProfileInt(L"SearchRule",L"Count",0,wsExePath);
+	if(iIniCount == 0)
+		return;
+	for(int i=0; i<iIniCount;i++)
+	{
+		wsprintf(wsIniCount,L"%d",i+1);
+		GetPrivateProfileString(L"SearchRule",wsIniCount,L"ERROR",wsIniEntry,sizeof(wsIniEntry),wsExePath);
+		if(wcscmp(wsIniEntry,L"ERROR")==0)
+			return;
+		m_RuleCB.AddString(wsIniEntry);
+	}
+}
+
+
+
+BOOL CAPPCON_Log_ParserDlg::OnInitDialog()
+{
+	CResizableDialog::OnInitDialog();
+
+	// Add "About..." menu item to system menu.
+
+	// IDM_ABOUTBOX must be in the system command range.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
+	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	if (pSysMenu != NULL)
+	{
+		CString strAboutMenu;
+		strAboutMenu.LoadString(IDS_ABOUTBOX);
+		if (!strAboutMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+		}
+	}
+
+	// Set the icon for this dialog.  The framework does this automatically
+	//  when the application's main window is not a dialog
+	SetIcon(m_hIcon, TRUE);			// Set big icon
+	SetIcon(m_hIcon, FALSE);		// Set small icon
+
+	// TODO: Add extra initialization here
+
+	//parent name, child path, action, command line, appcon thread id, pid, parent pid, child MD5
+	AutoMove(IDC_EDIT2_FILEPATH,0,0,100,0);
+	AutoMove(IDC_BUTTON3_BROWSE,100,0,0,0);
+	AutoMove(IDC_BUTTON1_LOAD,100,0,0,0);
+	AutoMove(IDC_STATIC,100,0,0,0);
+	AutoMove(IDC_COMBO1_MARK,100,0,0,0);
+	AutoMove(IDC_BUTTON3_BROWSE2_FOLDER,100,0,0,0);
+	
+	AutoMove(IDC_LIST1_APPCON,0,0,100,100);
+	AutoMove(IDC_EDIT1_KEY1,0,0,20,0);
+	AutoMove(IDC_EDIT2_KEY2,20,0,20,0);
+	AutoMove(IDC_EDIT3_KEY3,40,0,20,0);
+	AutoMove(IDC_EDIT4_KEY4,60,0,20,0);
+	AutoMove(IDC_EDIT5_KEY5,80,0,20,0);
+
+	AutoMove(IDC_COMBO1_RULE,0,0,100,0);
+	AutoMove(IDC_SYSLINK2,100,0,0,0);
+	AutoMove(IDC_BUTTON2_SAVERULE,100,0,0,0);
+	AutoMove(IDC_BUTTON1_SEARCH,100,0,0,0);
+	AutoMove(IDC_BUTTON2_FIND,100,0,0,0);
+	AutoMove(IDC_STATIC_MARKCOUNT,100,0,0,0);
+	AutoMove(IDC_STATIC_DELCOUNT,100,0,0,0);
+	AutoMove(IDC_BUTTON1,100,0,0,0);
+	AutoMove(IDC_BUTTON2_COPYM,50,100,0,0);
+	AutoMove(IDC_BUTTON2_COPYM2,50,100,0,0);
+	AutoMove(IDC_SYSLINK3,50,100,0,0);
+	AutoMove(IDC_BUTTON2_TIMEDIFF,50,100,0,0);
+	AutoMove(IDC_STATIC_TIMEDIFF,50,100,0,0);
+
+	AutoMove(IDC_STATIC_STATUS,0,100,0,0);
+	AutoMove(IDC_STATIC_COUNT,100,100,0,0);
+
+	m_ApconLC.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_SIMPLESELECT | LVS_EX_BORDERSELECT);
+	m_ApconLC.SetHeadings(L"S.No,40;M/D,40;Date N Time,190;Parent Name,120;Child Path,250;Action,70;Command Line,280;Apcon Thread ID,120;PID,60;Parent PID,80;Child MD5,90;SearchParam,0");
+	m_ApconLC.report=1;
+
+	m_AccelM = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR1));
+	m_AccelM1 = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR2));
+	m_AccelM2 = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR3));
+	m_AccelM3 = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR4));
+
+	m_Marker.AddString(L"M1");
+	m_Marker.AddString(L"M2");
+	m_Marker.AddString(L"M3");
+	m_Marker.AddString(L"M4");
+	m_Marker.AddString(L"M5");
+	m_Marker.AddString(L"M6");
+	m_Marker.AddString(L"M7");
+	m_Marker.AddString(L"M8");
+	m_Marker.AddString(L"M9");
+
+	m_Marker.SetCurSel(0);
+
+	iSearchFlag = 0;
+	iDeleteMark = 0;
+	iDelCount = 0;
+	iMarkCount = 0;
+	//m_LogFilePath.DragAcceptFiles();
+	typedef BOOL (WINAPI *CHANGEWINDOWMESSAGEFILTER)(UINT message, DWORD dwFlag);
+	CHANGEWINDOWMESSAGEFILTER fnChangeWindowMessageFilter = NULL;
+	HMODULE hModUser32 = LoadLibrary(L"User32.dll");
+	fnChangeWindowMessageFilter = (CHANGEWINDOWMESSAGEFILTER)GetProcAddress(hModUser32, "ChangeWindowMessageFilter");
+	if(fnChangeWindowMessageFilter)
+	{
+		fnChangeWindowMessageFilter(WM_DROPFILES, MSGFLT_ADD);
+		fnChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
+		fnChangeWindowMessageFilter(0x0049, 
+			MSGFLT_ADD);
+	}
+
+	//ParseAndFillData();
+	GetTodayDate();
+	FillRuleCombo();
+
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CAPPCON_Log_ParserDlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialog::OnSysCommand(nID, lParam);
+	}
+}
+
+// If you add a minimize button to your dialog, you will need the code below
+//  to draw the icon.  For MFC applications using the document/view model,
+//  this is automatically done for you by the framework.
+
+void CAPPCON_Log_ParserDlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this); // device context for painting
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		// Center icon in client rectangle
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		// Draw the icon
+		dc.DrawIcon(x, y, m_hIcon);
+	}
+	else
+	{
+		CDialog::OnPaint();
+	}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags
+//  the minimized window.
+HCURSOR CAPPCON_Log_ParserDlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CAPPCON_Log_ParserDlg::OnDropFiles(HDROP hDropInfo)
+{
+	// TODO: Add your message handler code here and/or call default
+	CString    sFile;
+    DWORD      nBuffer    = 0;
+    // Get the number of files dropped
+    UINT nFilesDropped    = DragQueryFile (hDropInfo, 0xFFFFFFFF, NULL, 0);
+    // If more than one, only use the first
+    if (nFilesDropped > 0)
+    {
+        // Get the buffer size for the first filename
+        nBuffer = DragQueryFile (hDropInfo, 0, NULL, 0);
+        // Get path and name of the first file
+        DragQueryFile (hDropInfo, 0, sFile.GetBuffer (nBuffer + 1), nBuffer + 1);
+		sFile.ReleaseBuffer ();
+        // Do something with the path
+		m_LogFilePath.SetWindowTextW(sFile);
+    }
+    // Free the memory block containing the dropped-file information
+    CDialog::OnDropFiles(hDropInfo);
+	//CDialog::OnDropFiles(hDropInfo);
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton3Browse()
+{
+	// TODO: Add your control notification handler code here
+	TCHAR szFilter[] = _T("Log Files(*.txt, *.log)|*.txt;*.log||");
+	CFileDialog dlgFile(TRUE, NULL, NULL, OFN_HIDEREADONLY, szFilter, this);
+	CString fileName;
+	/*const int c_cMaxFiles = 100;
+	const int c_cbBuffSize = (c_cMaxFiles * (MAX_PATH + 1)) + 1;
+	dlgFile.GetOFN().lpstrFile = fileName.GetBuffer(c_cbBuffSize);
+	dlgFile.GetOFN().nMaxFile = c_cMaxFiles;*/
+
+	if(dlgFile.DoModal() == IDOK)
+	{
+		CString csFilePath = dlgFile.GetPathName();
+		m_LogFilePath.SetWindowText(csFilePath);
+	}
+	fileName.ReleaseBuffer();
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton1Load()
+{
+	// TODO: Add your control notification handler code here
+	CString csFilePath;
+	WCHAR wsHeaderText[MAX_PATH] = {0};
+	m_LogFilePath.GetWindowText(csFilePath);
+	if(GetCheckedRadioButton(IDC_RADIO1_ZVMON, IDC_RADIO2_APCON) == IDC_RADIO1_ZVMON)
+	{
+		/*if(StrStrI(csFilePath, L"zvmon")==NULL)
+		{
+			MessageBox(L"Please select ZVMON log file path");
+			return;
+		}*/
+		CHeaderCtrl *pHdr = m_ApconLC.GetHeaderCtrl();
+		wcscpy(wsHeaderText,L"Extension");
+		HDITEM pHdItem;
+		pHdItem.mask = HDI_TEXT;
+		pHdItem.pszText = wsHeaderText;
+		pHdItem.cchTextMax = MAX_PATH;
+		pHdr->SetItem(5, &pHdItem);
+		wcscpy(wsHeaderText, L"PID");
+		pHdItem.pszText = wsHeaderText;
+		pHdr->SetItem(7, &pHdItem);
+		wcscpy(wsHeaderText, L"TID");
+		pHdItem.pszText = wsHeaderText;
+		pHdr->SetItem(8, &pHdItem);
+
+		bZVMonFlag = true;
+	}
+	else if(GetCheckedRadioButton(IDC_RADIO1_ZVMON, IDC_RADIO2_APCON) == IDC_RADIO2_APCON)
+	{
+		/*if(StrStrI(csFilePath, L"apconac")==NULL)
+		{
+			MessageBox(L"Please select APCON log file path");
+			return;
+		}*/
+		if(bZVMonFlag == true)
+		{
+			CHeaderCtrl *pHdr = m_ApconLC.GetHeaderCtrl();
+			WCHAR wsHeaderText[MAX_PATH] = {L"Action"};
+			HDITEM pHdItem;
+			pHdItem.mask = HDI_TEXT;
+			pHdItem.pszText = wsHeaderText;
+			pHdItem.cchTextMax = MAX_PATH;
+			pHdr->SetItem(5, &pHdItem);
+			wcscpy(wsHeaderText, L"Apcon Thread ID");
+			pHdItem.pszText = wsHeaderText;
+			pHdr->SetItem(7, &pHdItem);
+			wcscpy(wsHeaderText, L"PID");
+			pHdItem.pszText = wsHeaderText;
+			pHdr->SetItem(8, &pHdItem);
+		}
+
+		bZVMonFlag = false;
+	}
+	else if(GetCheckedRadioButton(IDC_RADIO1_ZVMON, IDC_RADIO2_APCON) == 0)
+	{
+		MessageBox(L"Please select a radio button to specify the log type");
+		return;
+	}
+
+	AfxBeginThread(ParseAndFillData,this);
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton1Search()
+{
+	// TODO: Add your control notification handler code here
+	CString csKey1, csKey2, csKey3, csKey4, csKey5, csSearchString;
+	CString csMarkCount, csDelCount;
+	int iCount=0, iListControlCount=0;
+	BOOL blnKey1 = FALSE, blnKey2 = FALSE, blnKey3 = FALSE, blnKey4 = FALSE, blnKey5 = FALSE;
+	/*iDelCount =0;
+	iMarkCount =0;*/
+
+	m_Marker.GetWindowTextW(csMarkerNo);
+	
+	m_Key1.GetWindowTextW(csKey1);
+	m_Key2.GetWindowTextW(csKey2);
+	m_Key3.GetWindowTextW(csKey3);
+	m_Key4.GetWindowTextW(csKey4);
+	m_Key5.GetWindowTextW(csKey5);
+	iCount = m_ApconLC.GetItemCount();
+
+	csKey1.Trim();
+	if(csKey1.GetLength() > 0)
+		blnKey1 = TRUE;
+	csKey2.Trim();
+	if(csKey2.GetLength() > 0)
+		blnKey2 = TRUE;
+	csKey3.Trim();
+	if(csKey3.GetLength() > 0)
+		blnKey3 = TRUE;
+	csKey4.Trim();
+	if(csKey4.GetLength() > 0)
+		blnKey4 = TRUE;
+	csKey5.Trim();
+	if(csKey5.GetLength() > 0)
+		blnKey5 = TRUE;
+
+	if(blnKey1 == FALSE && blnKey2 == FALSE && blnKey3 == FALSE && blnKey4 == FALSE && blnKey5 == FALSE)
+		return;
+	if(iCount>0)
+	{
+		for(int i=0;i<iCount;i++)
+		{
+			//L"S.No,40;M/D,40;Date N Time,100;Parent Name,100;Child Path,130;Action,70;Command Line,130;
+			//Apcon Thread ID,120;PID,60;Parent PID,80;Child MD5,90;SearchParam,0");
+			csSearchString.Empty();
+			csSearchString += m_ApconLC.GetItemText(i,2);
+			csSearchString += m_ApconLC.GetItemText(i,3) + L"#";
+			csSearchString += m_ApconLC.GetItemText(i,4);
+			csSearchString += m_ApconLC.GetItemText(i,5);
+			csSearchString += m_ApconLC.GetItemText(i,6);
+			csSearchString += m_ApconLC.GetItemText(i,7);
+			csSearchString += m_ApconLC.GetItemText(i,8);
+			csSearchString += m_ApconLC.GetItemText(i,9);
+			csSearchString += m_ApconLC.GetItemText(i,10);
+
+			iSearchFlag = 1;
+			if(iSearchFlag && blnKey1)
+				if(StrStrI(csSearchString, csKey1) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey2)
+				if(StrStrI(csSearchString, csKey2) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey3)
+				if(StrStrI(csSearchString, csKey3) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey4)
+				if(StrStrI(csSearchString, csKey4) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey5)
+				if(StrStrI(csSearchString, csKey5) == NULL)
+					iSearchFlag=0;
+
+			if(iSearchFlag && iDeleteMark)
+			{
+				iListControlCount++;
+				m_ApconLC.SetItemText(i, 11, L"1");
+				m_ApconLC.SetItemText(i, 1, L"D");
+				m_ApconLC.SetSelectionMark(i);
+				//iDelCount++;
+				//m_ApconLC.UpdateWindow();		//flickering issues solved
+				//Invalidate();
+			}
+			else if(iSearchFlag)
+			{
+				m_ApconLC.SetItemText(i, 11, L"1");
+				m_ApconLC.SetItemText(i, 1, csMarkerNo);
+				m_ApconLC.SetSelectionMark(i);
+				//iMarkCount++;
+				//m_ApconLC.UpdateWindow();		//flickering issues solved
+				//Invalidate();
+			}
+			else
+			{
+				m_ApconLC.SetItemText(i, 11, L"0");
+				//m_ApconLC.SetItemText(i, 1, L" ");
+				m_ApconLC.SetSelectionMark(i);
+				//m_ApconLC.UpdateWindow();		//flickering issues solved
+				//Invalidate();
+			}
+			
+		}
+		m_ApconLC.UpdateWindow();
+		m_ApconLC.Invalidate();
+		/*if(iSearchFlag)
+			AfxBeginThread(ParseAndFillData,this);*/
+	}
+	
+	
+	MaintainCount();
+	csDelCount.Format(L"%d",iDelCount);
+	csMarkCount.Format(L"%d",iMarkCount);
+	m_DelCount.SetWindowTextW(csDelCount);
+	m_MarkCount.SetWindowTextW(csMarkCount);
+	iDeleteMark=0;
+	//csSearchString = L"Count: "
+//	GetDlgItem(IDC_STATIC_COUNT)->SetWindowText(L"");
+}
+
+void CAPPCON_Log_ParserDlg::MaintainCount()
+{
+	int iCount = m_ApconLC.GetItemCount();
+	CString csMarking;
+	iMarkCount = 0;
+	iDelCount = 0;
+	for(int i=0;i<iCount;i++)
+	{
+		csMarking = m_ApconLC.GetItemText(i,1);
+		if(csMarking.Find(L"M",0)>=0)
+			iMarkCount++;
+		else if(csMarking.Compare(L"D")==0)
+			iDelCount++;
+	}
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2Saverule()
+{
+	// TODO: Add your control notification handler code here
+	CString csKey1, csKey2, csKey3, csKey4, csKey5, csStringToAddInCB;
+	WCHAR wsExePath[MAX_PATH]={0}, wsIniCount[20]={0};
+	int iIniCount=0;
+	++iIniCount;
+	wsprintf(wsIniCount,L"%d",iIniCount);
+	WritePrivateProfileString(L"SearchRule",wsIniCount,csStringToAddInCB,wsExePath);
+	WritePrivateProfileString(L"SearchRule",L"Count",wsIniCount,wsExePath);
+	m_RuleCB.AddString(csStringToAddInCB);
+	m_Key1.GetWindowTextW(csKey1);
+	m_Key2.GetWindowTextW(csKey2);
+	m_Key3.GetWindowTextW(csKey3);
+	m_Key4.GetWindowTextW(csKey4);
+	m_Key5.GetWindowTextW(csKey5);
+	csKey1.Trim();
+	csKey2.Trim();
+	csKey3.Trim();
+	csKey4.Trim();
+	csKey5.Trim();
+	csStringToAddInCB += L"$" + csKey1 + L"$" +csKey2 + L"$" + csKey3 + L"$" + csKey4 + L"$" + csKey5 + L"$" ;
+
+	GetModuleFileName(NULL,wsExePath,sizeof(wsExePath));
+	PathRemoveFileSpec(wsExePath);
+	wcscat(wsExePath,L"\\SearchRules.ini");
+	
+	iIniCount = GetPrivateProfileInt(L"SearchRule",L"Count",0,wsExePath);
+
+	if(iIniCount == 0)
+		WritePrivateProfileString(L"SearchRule",L"Count",L"0",wsExePath);
+
+	
+	MessageBox(L"Rule saved in INI.");
+	m_Key1.SetWindowTextW(L"");
+	m_Key2.SetWindowTextW(L"");
+	m_Key3.SetWindowTextW(L"");
+	m_Key4.SetWindowTextW(L"");
+	m_Key5.SetWindowTextW(L"");
+}
+
+void CAPPCON_Log_ParserDlg::OnCbnSelchangeCombo1Rule()
+{
+	// TODO: Add your control notification handler code here
+	CString csSelection, csKey1, csKey2, csKey3, csKey4, csKey5;
+	int iStart=0;
+	
+	m_RuleCB.GetLBText(m_RuleCB.GetCurSel(),csSelection);
+	if(csSelection.Replace(L"$",L"$")<5)
+		return;
+	csSelection.Replace(L"$$", L"$ $");
+	csSelection.Replace(L"$$", L"$ $");
+	csKey1 = csSelection.Tokenize(L"$",iStart);
+	csKey2 = csSelection.Tokenize(L"$",iStart);
+	csKey3 = csSelection.Tokenize(L"$",iStart);
+	csKey4 = csSelection.Tokenize(L"$",iStart);
+	csKey5 = csSelection.Tokenize(L"$",iStart);
+	
+	m_Key1.SetWindowTextW(csKey1);
+	m_Key2.SetWindowTextW(csKey2);
+	m_Key3.SetWindowTextW(csKey3);
+	m_Key4.SetWindowTextW(csKey4);
+	m_Key5.SetWindowTextW(csKey5);
+}
+
+void CAPPCON_Log_ParserDlg::OnAccelerator32771()
+{
+	// TODO: Add your command handler code here
+	CString csFlag=L"";
+	m_Marker.GetWindowTextW(csMarkerNo);
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csFlag = m_ApconLC.GetItemText(row,1);
+			if(csFlag.Find(L"M",0)>=0)
+				m_ApconLC.SetItemText(row,1,L"");
+			else if(csFlag.Compare(L"D")==0)
+				m_ApconLC.SetItemText(row,1,csMarkerNo);
+			else
+				m_ApconLC.SetItemText(row,1,csMarkerNo);
+        }
+    }else
+    {
+        return;
+    }
+	m_ApconLC.UpdateWindow();
+	Invalidate();
+}
+
+
+BOOL CAPPCON_Log_ParserDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: Add your specialized code here and/or call the base class
+	if (m_AccelM && pMsg->hwnd==m_ApconLC.GetSafeHwnd())
+    {
+        if (::TranslateAccelerator(m_hWnd, m_AccelM, pMsg))
+            return(TRUE);
+    }
+
+	if (m_AccelM1 && pMsg->hwnd==m_ApconLC.GetSafeHwnd())
+    {
+        if (::TranslateAccelerator(m_hWnd, m_AccelM1, pMsg))
+            return(TRUE);
+    }
+
+	if (m_AccelM2 && pMsg->hwnd==m_ApconLC.GetSafeHwnd())
+    {
+        if (::TranslateAccelerator(m_hWnd, m_AccelM2, pMsg))
+            return(TRUE);
+    }
+
+	if (m_AccelM3 && pMsg->hwnd==m_ApconLC.GetSafeHwnd())
+    {
+        if (::TranslateAccelerator(m_hWnd, m_AccelM3, pMsg))
+            return(TRUE);
+    }
+
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
+void CAPPCON_Log_ParserDlg::OnContextCopy()
+{
+	// TODO: Add your command handler code here
+
+	CString csMessage = L"";
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csMessage += m_ApconLC.GetItemText(row, 0) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 1) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 2) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 3) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 4) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 6) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 7) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 8) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 9) + L" | ";
+            csMessage += m_ApconLC.GetItemText(row, 10) + L" | ";
+        }
+    }else
+    {
+        return;
+    }
+    if (OpenClipboard())
+    {
+        EmptyClipboard();
+        HGLOBAL hClipboardData;
+        hClipboardData = GlobalAlloc(GMEM_DDESHARE, csMessage.GetLength()+1);
+        char *pchData;
+        pchData = (char*)GlobalLock(hClipboardData);
+        sprintf(pchData, "%S", csMessage);
+        GlobalUnlock(hClipboardData);
+        SetClipboardData(CF_TEXT,hClipboardData);
+        CloseClipboard();
+    }
+}
+
+void CAPPCON_Log_ParserDlg::OnNMClickSyslink1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
+
+void CAPPCON_Log_ParserDlg::OnNMClickSyslink2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+	m_Key1.SetWindowTextW(L"");
+	m_Key2.SetWindowTextW(L"");
+	m_Key3.SetWindowTextW(L"");
+	m_Key4.SetWindowTextW(L"");
+	m_Key5.SetWindowTextW(L"");
+	m_RuleCB.SetCurSel(-1);
+	m_LogFilePath.SetWindowTextW(L"");
+	int iCount = m_ApconLC.GetItemCount();
+	for(int i=0;i<iCount;i++)
+		m_ApconLC.SetItemText(i,11,L"0");
+	m_ApconLC.UpdateWindow();
+	Invalidate();
+}
+
+void CAPPCON_Log_ParserDlg::OnNMRClickList1Appcon(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+	int iItem = pNMItemActivate->iItem;
+	if(iItem >= 0)
+	{        
+		CPoint point;
+		GetCursorPos(&point);
+		CMenu menu;
+		menu.LoadMenuW(IDR_MENU1);
+		CMenu *file_menu;
+		file_menu = menu.GetSubMenu(0);
+		file_menu->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, point.x,point.y, this);
+	}
+}
+
+void CAPPCON_Log_ParserDlg::OnAccelerator32774()
+{
+	// TODO: Add your command handler code here
+	CString csFlag=L"";
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csFlag = m_ApconLC.GetItemText(row,1);
+			if(csFlag.Compare(L"D")==0)
+				m_ApconLC.SetItemText(row,1,L"");
+			else if(csFlag.Find(L"M",0)>=0)
+				m_ApconLC.SetItemText(row,1,L"D");
+			else
+				m_ApconLC.SetItemText(row,1,L"D");
+        }
+    }else
+    {
+        return;
+    }
+	m_ApconLC.UpdateWindow();
+	Invalidate();
+}
+
+void CAPPCON_Log_ParserDlg::OnAccelerator32776()
+{
+	// TODO: Add your command handler code here
+	int iTotalCount = 0;
+	CString csTotalCount;
+	if(MessageBox(L"Are you sure you want to delete selected items?",L"Message",MB_YESNO)==IDYES)
+	{
+		POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+		if (pos != NULL)
+		{
+			while(pos != NULL)
+			{
+				int row = m_ApconLC.GetNextSelectedItem(pos);
+				m_ApconLC.DeleteItem(row);
+				pos = m_ApconLC.GetFirstSelectedItemPosition();
+			}
+		}
+		
+		iTotalCount = m_ApconLC.GetItemCount();
+		csTotalCount.Format(L"%d",iTotalCount);
+	}
+	m_TotalCount.SetWindowTextW(csTotalCount);
+	m_MarkCount.SetWindowTextW(L"");
+	m_DelCount.SetWindowTextW(L"");
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
+	iDeleteMark = 1;
+	OnBnClickedButton1Search();
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2Copym()
+{
+	// TODO: Add your control notification handler code here
+	CString csMessage = L"", csCheck = L"";
+	int iCount=0;
+	iCount = m_ApconLC.GetItemCount();
+	if(iCount == 0)
+		return;
+    /*POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {*/
+        /*while(pos != NULL)*/
+		for(int i=0;i<iCount;i++)
+        {
+            //int row = m_ApconLC.GetNextSelectedItem(pos);
+			csCheck = L"";
+			csCheck += m_ApconLC.GetItemText(i,1);
+			if(csCheck.Find(L"M",0)<0)
+				continue;
+
+			csMessage += m_ApconLC.GetItemText(i, 0) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 1) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 2) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 3) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 4) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 6) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 7) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 8) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 9) + L" | ";
+            csMessage += m_ApconLC.GetItemText(i, 10) + L" | ";
+			csMessage += L"\n";
+        }
+   /* }else
+    {
+        return;
+    }*/
+    if (OpenClipboard())
+    {
+        EmptyClipboard();
+        HGLOBAL hClipboardData;
+        hClipboardData = GlobalAlloc(GMEM_DDESHARE, csMessage.GetLength()+1);
+        char *pchData;
+        pchData = (char*)GlobalLock(hClipboardData);
+        sprintf(pchData, "%S", csMessage);
+        GlobalUnlock(hClipboardData);
+        SetClipboardData(CF_TEXT,hClipboardData);
+        CloseClipboard();
+    }
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2Copym2()
+{
+	// TODO: Add your control notification handler code here
+	CString csMessage = L"", csCheck = L"";
+	int iCount=0;
+	iCount = m_ApconLC.GetItemCount();
+	if(iCount == 0)
+		return;
+
+	for(int i=0;i<m_ApconLC.GetItemCount();i++)
+    {
+            //int row = m_ApconLC.GetNextSelectedItem(pos);
+		csCheck = L"";
+		csCheck += m_ApconLC.GetItemText(i,1);
+		if(csCheck.Compare(L"D")!=0)
+			continue;
+		m_ApconLC.DeleteItem(i);
+		i--;
+	}
+}
+
+void CAPPCON_Log_ParserDlg::OnNMClickSyslink3(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+	CString csCheck;
+	for(int i=0;i<m_ApconLC.GetItemCount();i++)
+    {
+		csCheck = L"";
+		csCheck += m_ApconLC.GetItemText(i,1);
+		if(csCheck.Compare(L"D")==0 || csCheck.Find(L"M",0)>=0)
+			m_ApconLC.SetItemText(i,1,L"");
+	}
+	m_ApconLC.UpdateWindow();
+	m_ApconLC.Invalidate();
+	m_TimeDiff.SetWindowTextW(L"");
+	m_MarkCount.SetWindowTextW(L"");
+	m_DelCount.SetWindowTextW(L"");
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2()
+{
+	// TODO: Add your control notification handler code here
+	CString csFirstTime, csSecondTime, csTemp, csHr1, csMin1, csSec1
+		, csHr2, csMin2, csSec2;
+	int iStart=0;
+	int iHr1, iMin1, iSec1, iHr2, iMin2, iSec2;
+	POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+	if(pos)
+	{
+		int iRow = m_ApconLC.GetNextSelectedItem(pos);
+		csFirstTime = m_ApconLC.GetItemText(iRow,2);
+		++pos;
+		iRow = m_ApconLC.GetNextSelectedItem(pos);
+		csSecondTime = m_ApconLC.GetItemText(iRow,2);
+		//csFirstTime = L"15/02/2022 08:19:34:878 PM";
+		//csSecondTime = L"15/02/2022 10:37:05:412 AM";
+		
+		csFirstTime.Tokenize(L" ",iStart);
+		csFirstTime = csFirstTime.Tokenize(L"",iStart);
+		iStart=0;
+		csHr1 = csFirstTime.Tokenize(L":",iStart);
+		csMin1 = csFirstTime.Tokenize(L":",iStart);
+		csSec1 = csFirstTime.Tokenize(L":",iStart);
+
+			iHr1 = _wtoi(csHr1);
+			iMin1 = _wtoi(csMin1);
+			iSec1 = _wtoi(csSec1);
+
+
+		if(csFirstTime.Find(L"PM",0)>=0 && csHr1.Compare(L"12")!=0)
+		{
+			iHr1+=12;
+			//csHr1.Format(L"%d",iHr1);
+		}
+
+
+		csSecondTime.Tokenize(L" ",iStart);
+		csSecondTime = csSecondTime.Tokenize(L"",iStart);
+		iStart=0;
+		csHr2 = csSecondTime.Tokenize(L":",iStart);
+		csMin2 = csSecondTime.Tokenize(L":",iStart);
+		csSec2 = csSecondTime.Tokenize(L":",iStart);
+
+			iHr2 = _wtoi(csHr2);
+			iMin2 = _wtoi(csMin2);
+			iSec2 = _wtoi(csSec2);
+
+
+		if(csSecondTime.Find(L"PM",0)>=0 && csHr2.Compare(L"12")!=0)
+		{
+			iHr2+=12;
+			//csHr2.Format(L"%d",iHr1);
+		}
+
+		iHr2-=iHr1;
+		iMin2-=iMin1;
+		iSec2-=iSec1;
+
+		csFirstTime.Format(L"%d:%d:%d", iHr2,iMin2,iSec2);
+		csFirstTime.Replace(L"-",L"");
+		m_TimeDiff.SetWindowTextW(csFirstTime);
+	}
+
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2Find()
+{
+	// TODO: Add your control notification handler code here
+	CString csKey1, csKey2, csKey3, csKey4, csKey5, csSearchString;
+	int iCount=0;
+	BOOL blnKey1 = FALSE, blnKey2 = FALSE, blnKey3 = FALSE, blnKey4 = FALSE, blnKey5 = FALSE;
+
+	m_FindStatus.SetWindowTextW(L"");
+	m_Key1.GetWindowTextW(csKey1);
+	m_Key2.GetWindowTextW(csKey2);
+	m_Key3.GetWindowTextW(csKey3);
+	m_Key4.GetWindowTextW(csKey4);
+	m_Key5.GetWindowTextW(csKey5);
+	iCount = m_ApconLC.GetItemCount();
+
+	csKey1.Trim();
+	if(csKey1.GetLength() > 0)
+		blnKey1 = TRUE;
+	csKey2.Trim();
+	if(csKey2.GetLength() > 0)
+		blnKey2 = TRUE;
+	csKey3.Trim();
+	if(csKey3.GetLength() > 0)
+		blnKey3 = TRUE;
+	csKey4.Trim();
+	if(csKey4.GetLength() > 0)
+		blnKey4 = TRUE;
+	csKey5.Trim();
+	if(csKey5.GetLength() > 0)
+		blnKey5 = TRUE;
+
+	if(blnKey1 == FALSE && blnKey2 == FALSE && blnKey3 == FALSE && blnKey4 == FALSE && blnKey5 == FALSE)
+		return;
+	if(iCount>0)
+	{
+		for(int i = 0; i < iCount; i++)
+			m_ApconLC.SetItemState(i, 0, LVIS_SELECTED);
+
+		int nSel = m_ApconLC.GetSelectionMark();
+		for(int i = nSel + 1; i != nSel; i++)
+		{
+			//L"S.No,40;M/D,40;Date N Time,100;Parent Name,100;Child Path,130;Action,70;Command Line,130;
+			//Apcon Thread ID,120;PID,60;Parent PID,80;Child MD5,90;SearchParam,0");
+			if(i == iCount)
+				i = 0;
+			csSearchString.Empty();
+			csSearchString += m_ApconLC.GetItemText(i,2);
+			csSearchString += m_ApconLC.GetItemText(i,3) + L"#";
+			csSearchString += m_ApconLC.GetItemText(i,4);
+			csSearchString += m_ApconLC.GetItemText(i,5);
+			csSearchString += m_ApconLC.GetItemText(i,6);
+			csSearchString += m_ApconLC.GetItemText(i,7);
+			csSearchString += m_ApconLC.GetItemText(i,8);
+			csSearchString += m_ApconLC.GetItemText(i,9);
+			csSearchString += m_ApconLC.GetItemText(i,10);
+
+			iSearchFlag = 1;
+			if(iSearchFlag && blnKey1)
+				if(StrStrI(csSearchString, csKey1) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey2)
+				if(StrStrI(csSearchString, csKey2) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey3)
+				if(StrStrI(csSearchString, csKey3) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey4)
+				if(StrStrI(csSearchString, csKey4) == NULL)
+					iSearchFlag=0;
+			if(iSearchFlag && blnKey5)
+				if(StrStrI(csSearchString, csKey5) == NULL)
+					iSearchFlag=0;
+
+			if(iSearchFlag)
+			{
+				m_ApconLC.SetSelectionMark(i);
+				m_ApconLC.EnsureVisible(i, FALSE);
+				m_ApconLC.SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+				m_ApconLC.SetFocus();
+				break;
+			}	
+		}
+		if(!iSearchFlag)
+			m_FindStatus.SetWindowTextW(L"Not Found.");
+	}	
+
+}
+
+void CAPPCON_Log_ParserDlg::OnAccelerator32778()
+{
+	// TODO: Add your command handler code here
+	OnBnClickedButton2Find();
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton2Timediff()
+{
+	// TODO: Add your control notification handler code here
+	OnBnClickedButton2();
+}
+
+void CAPPCON_Log_ParserDlg::OnCbnSelchangeCombo1()
+{
+	// TODO: Add your control notification handler code here
+
+}
+
+void CAPPCON_Log_ParserDlg::OnContextCopychildpath()
+{
+	// TODO: Add your command handler code here 4
+	CString csMessage = L"";
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csMessage += m_ApconLC.GetItemText(row, 4);
+			m_Key1.SetWindowTextW(csMessage);
+        }
+    }else
+    {
+        return;
+    }
+    if (OpenClipboard())
+    {
+        EmptyClipboard();
+        HGLOBAL hClipboardData;
+        hClipboardData = GlobalAlloc(GMEM_DDESHARE, csMessage.GetLength()+1);
+        char *pchData;
+        pchData = (char*)GlobalLock(hClipboardData);
+        sprintf(pchData, "%S", csMessage);
+        GlobalUnlock(hClipboardData);
+        SetClipboardData(CF_TEXT,hClipboardData);
+        CloseClipboard();
+    }
+}
+
+void CAPPCON_Log_ParserDlg::OnContextCopyparentname()
+{
+	// TODO: Add your command handler code here 3
+	CString csMessage = L"";
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csMessage += m_ApconLC.GetItemText(row, 3);
+			m_Key2.SetWindowTextW(csMessage);
+        }
+    }else
+    {
+        return;
+    }
+    if (OpenClipboard())
+    {
+        EmptyClipboard();
+        HGLOBAL hClipboardData;
+        hClipboardData = GlobalAlloc(GMEM_DDESHARE, csMessage.GetLength()+1);
+        char *pchData;
+        pchData = (char*)GlobalLock(hClipboardData);
+        sprintf(pchData, "%S", csMessage);
+        GlobalUnlock(hClipboardData);
+        SetClipboardData(CF_TEXT,hClipboardData);
+        CloseClipboard();
+    }
+}
+
+void CAPPCON_Log_ParserDlg::OnContextCopycommandline()
+{
+	// TODO: Add your command handler code here 6
+	CString csMessage = L"";
+    POSITION pos = m_ApconLC.GetFirstSelectedItemPosition();
+    if (pos != NULL)
+    {
+        while(pos != NULL)
+        {
+            int row = m_ApconLC.GetNextSelectedItem(pos);
+			csMessage += m_ApconLC.GetItemText(row, 6);
+			m_Key3.SetWindowTextW(csMessage);
+        }
+    }else
+    {
+        return;
+    }
+    if (OpenClipboard())
+    {
+        EmptyClipboard();
+        HGLOBAL hClipboardData;
+        hClipboardData = GlobalAlloc(GMEM_DDESHARE, csMessage.GetLength()+1);
+        char *pchData;
+        pchData = (char*)GlobalLock(hClipboardData);
+        sprintf(pchData, "%S", csMessage);
+        GlobalUnlock(hClipboardData);
+        SetClipboardData(CF_TEXT,hClipboardData);
+        CloseClipboard();
+    }
+}
+
+void CAPPCON_Log_ParserDlg::OnBnClickedButton3Browse2Folder()
+{
+	// TODO: Add your control notification handler code here
+	 BROWSEINFO   bi; 
+    ZeroMemory(&bi,   sizeof(bi)); 
+    TCHAR   szDisplayName[MAX_PATH]; 
+    szDisplayName[0]    =   ' ';
+    bi.hwndOwner        =   this->m_hWnd; 
+    bi.pidlRoot         =   NULL; 
+    bi.pszDisplayName   =   szDisplayName; 
+    bi.lpszTitle        =   _T("Please select the path.. :"); 
+    bi.ulFlags          =   BIF_BROWSEINCLUDEFILES;
+    bi.lParam           =   NULL; 
+    bi.iImage           =   0;
+    LPITEMIDLIST   pidl   =   SHBrowseForFolder(&bi);
+    TCHAR   szPathName[MAX_PATH]; 
+    if   (NULL   !=   pidl)
+    {
+        BOOL bRet = SHGetPathFromIDList(pidl,szPathName);
+        if(_tcslen(szPathName) == 3)
+            szPathName[2] = 0;
+        m_LogFilePath.SetWindowText(szPathName);
+        if(FALSE == bRet)
+            return;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
